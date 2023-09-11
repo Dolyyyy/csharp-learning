@@ -19,12 +19,14 @@ namespace QuizzCapitales
         public static GameModeInfo? GameModeObject;
         public static int GoodAnswers = 0;
         public static int BadAnswers = 0;
+        public static int OldGoodAnswers = 0;
+        public static int OldBadAnswers = 0;
+        public static int OldGameMode = 0;
 
         public static int EasyQuestionNumber = 10;
         public static int MediumQuestionNumber = 25;
         public static int HardQuestionNumber = 50;
 
-        private static string? PlayerAnswerGameAgain;
         private static int? TotalAnsweredQuestion;
         public static void Jouer()
         {
@@ -37,6 +39,10 @@ namespace QuizzCapitales
                 DisplayGameMenu(UsedIndices);
                 int TotalQuestions = TotalQuestionGameModeType(GameMode);
 
+                if (OldGameMode != 0)
+                {
+                    Console.WriteLine($"Résultats du jeu précédent : \n{OldGoodAnswers} bonne(s) réponse(s) sur {TotalQuestionGameModeType(OldGameMode)} questions au total.");
+                }
                 for (int i = 0; i < TotalQuestions; i++)
                 {
                     int RandomIndex;
@@ -44,13 +50,15 @@ namespace QuizzCapitales
                     {
                         RandomIndex = Random.Next(Countries.Length);
                     } while (UsedIndices.Contains(RandomIndex));
-
                     UsedIndices.Add(RandomIndex);
                     DispatchGameModeAnswers(RandomIndex);
 
                 }
                 TotalAnsweredQuestion = GoodAnswers + BadAnswers;
-                Console.WriteLine($"\n{GoodAnswers} bonne(s) réponse(s) sur {TotalAnsweredQuestion} questions au total !");
+                OldBadAnswers = BadAnswers;
+                OldGoodAnswers = GoodAnswers;
+                OldGameMode = GameMode;
+                Console.WriteLine($"\n{GoodAnswers} bonne(s) réponse(s) sur {TotalAnsweredQuestion} question(s) au total !");
                 GameAgain = AskGameAgain();
             }
         }
@@ -67,7 +75,7 @@ namespace QuizzCapitales
                 "Géorgie", "Inde", "Indonésie", "Irak", "Iran", "Israël", "Japon", "Jordanie", "Kazakhstan", "Kirghizistan", "Koweït",
                 "Laos", "Liban", "Malaisie", "Maldives", "Mongolie", "Myanmar", "Népal", "Oman", "Ouzbékistan", "Pakistan", "Palestine",
                 "Philippines", "Qatar", "Singapour", "Sri Lanka", "Syrie", "Tadjikistan", "Taïwan", "Thaïlande", "Timor oriental", "Turkménistan",
-                "Turquie", "Viêt Nam", "Yémen"
+                "Turquie", "Viêt Nam", "Yémen", "Zambie", "Zimbabwe", "Canada", "Mexique", "Australie", "Nouvelle-Zélande", "Brésil", "Argentine", "Chili", "Colombie", "Pérou", "Équateur", "Afrique du Sud", "Égypte", "Kenya", "Nigeria", "Sénégal", "Maroc", 
             };
         }
 
@@ -81,8 +89,9 @@ namespace QuizzCapitales
                 "Stockholm", "Berne", "Kiev", "Kaboul", "Riyad", "Erevan", "Bakou", "Manama", "Dacca", "Thimphou", "Bandar Seri Begawan",
                 "Phnom Penh", "Pékin", "Pyongyang", "Séoul", "Abou Dabi", "Tbilissi", "New Delhi", "Jakarta", "Bagdad", "Téhéran",
                 "Jérusalem", "Tokyo", "Amman", "Astana", "Bichkek", "Koweït", "Vientiane", "Beyrouth", "Kuala Lumpur", "Malé", "Oulan-Bator",
-                "Naypyidaw", "Katmandou", "Mascate", "Tachkent", "Islamabad", "Jérusalem", "Manille", "Doha", "Singapour", "Colombo",
-                "Damas", "Douchanbé", "Taipei", "Bangkok", "Dili", "Achgabat", "Ankara", "Hanoï", "Sanaa"
+                "Naypyidaw", "Katmandou", "Mascate", "Tachkent", "Islamabad", "Ramallah / Jérusalem", "Manille", "Doha", "Singapour", "Colombo",
+                "Damas", "Douchanbé", "Taipei", "Bangkok", "Dili", "Achgabat", "Ankara", "Hanoï", "Sanaa", "Lusaka", "Harare", "Ottawa", "Mexico", 
+                "Canberra", "Wellington", "Brasília", "Buenos Aires", "Santiago", "Bogota", "Lima", "Quito",  "Pretoria", "Le Caire", "Nairobi", "Abuja", "Dakar", "Rabat"
             };
         }
 
@@ -104,8 +113,31 @@ namespace QuizzCapitales
         static void DisplayGameMenu(List<int> UsedIndices)
         {
             UsedIndices.Clear();
+            Console.Title = "Bienvenue sur Quizz Capitales !";
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("________        .__                 _________               .__  __         .__                 \r\n\\_____  \\  __ __|__|_______________ \\_   ___ \\_____  ______ |__|/  |______  |  |   ____   ______\r\n /  / \\  \\|  |  \\  \\___   /\\___   / /    \\  \\/\\__  \\ \\____ \\|  \\   __\\__  \\ |  | _/ __ \\ /  ___/\r\n/   \\_/.  \\  |  /  |/    /  /    /  \\     \\____/ __ \\|  |_> >  ||  |  / __ \\|  |_\\  ___/ \\___ \\ \r\n\\_____\\ \\_/____/|__/_____ \\/_____ \\  \\______  (____  /   __/|__||__| (____  /____/\\___  >____  >\r\n       \\__>              \\/      \\/         \\/     \\/|__|                 \\/          \\/     \\/ \n\n");
+            Console.ResetColor();
 
-            Console.WriteLine($"Veuillez préciser le mode de jeu que vous souhaitez via le numéro :\n1. Facile ({TotalQuestionGameModeType(1)} questions)\n2. Moyen ({TotalQuestionGameModeType(2)} questions)\n3. Difficile ({TotalQuestionGameModeType(3)} questions)");
+            Console.WriteLine("------------------------------------------------------------------");
+            Console.WriteLine("Veuillez préciser le mode de jeu que vous souhaitez via le numéro :");
+            Console.Write("\t1. ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($"Facile ({TotalQuestionGameModeType(1)} questions & 3 propositions)");
+            Console.ResetColor();
+
+            Console.Write("\n\t2. ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write($"Moyen ({TotalQuestionGameModeType(2)} questions & 5 propositions)");
+            Console.ResetColor();
+
+            Console.Write("\n\t3. ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write($"Difficile ({TotalQuestionGameModeType(3)} questions & résultat à écrire)");
+            Console.ResetColor();
+
+            Console.WriteLine("\n------------------------------------------------------------------");
+
+            Console.Write("→ ");
             GameMode = int.Parse(Console.ReadLine());
             GameModeInfo? GameModeObject = GetGameModeInfo(GameMode);
             Console.Clear();
@@ -130,21 +162,24 @@ namespace QuizzCapitales
                 default:
                     break;
             }
+
+            Console.Title = $"Quizz Capitales - {GoodAnswers} ✓ / {GoodAnswers + BadAnswers} ✘";
         }
 
 
         static bool CountryQuestionHard(int CountryIndex)
         {
-            Console.WriteLine($"\nQuelle est la capitale du pays suivant : {Countries[CountryIndex]} ({CountryIndex}) ?");
+            AskWichCapital(Countries[CountryIndex]);
+            Console.Write("\n→ ");
             string? PlayerQuestionAnswer = Console.ReadLine();
-            if (PlayerQuestionAnswer == Capitals[CountryIndex])
+            if (PlayerQuestionAnswer?.ToLower() == Capitals[CountryIndex].ToLower())
             {
-                Console.WriteLine("Félicitations !");
+                GoodAnswer();
                 return true;
             }
             else
             {
-                Console.WriteLine($"Mauvaise réponse, la capitale était {Capitals[CountryIndex]} !");
+                BadAnswer(Capitals[CountryIndex]);
                 return false;
             }
         }
@@ -167,7 +202,7 @@ namespace QuizzCapitales
 
             randomIndices = randomIndices.OrderBy(i => random.Next()).ToList();
 
-            Console.WriteLine($"\nQuelle est la capitale du pays suivant : {Countries[CountryIndex]} ?");
+            AskWichCapital(Countries[CountryIndex]);
 
             for (int i = 0; i < randomIndices.Count; i++)
             {
@@ -175,16 +210,17 @@ namespace QuizzCapitales
                 Console.WriteLine($"{i + 1}. {Capitals[optionIndex]}");
             }
             int correctOption = randomIndices.IndexOf(CountryIndex) + 1;
+            Console.Write("\n→ ");
             string? playerAnswer = Console.ReadLine();
 
-            if (playerAnswer == correctOption.ToString())
+            if (playerAnswer?.ToLower() == correctOption.ToString().ToLower())
             {
-                Console.WriteLine("Félicitations !");
+                GoodAnswer();
                 return true;
             }
             else
             {
-                Console.WriteLine($"Mauvaise réponse, la capitale était {Capitals[CountryIndex]} !");
+                BadAnswer(Capitals[CountryIndex]);
                 return false;
             }
         }
@@ -206,7 +242,7 @@ namespace QuizzCapitales
 
             randomIndices = randomIndices.OrderBy(i => random.Next()).ToList();
 
-            Console.WriteLine($"\nQuelle est la capitale du pays suivant : {Countries[CountryIndex]} ?");
+            AskWichCapital(Countries[CountryIndex]);
 
             for (int i = 0; i < randomIndices.Count; i++)
             {
@@ -214,40 +250,72 @@ namespace QuizzCapitales
                 Console.WriteLine($"{i + 1}. {Capitals[optionIndex]}");
             }
             int correctOption = randomIndices.IndexOf(CountryIndex) + 1;
+            Console.Write("\n→ ");
             string? playerAnswer = Console.ReadLine();
 
-            if (playerAnswer == correctOption.ToString())
+            if (playerAnswer?.ToLower() == correctOption.ToString().ToLower())
             {
-                Console.WriteLine("Félicitations !");
+                GoodAnswer();
                 return true;
             }
             else
             {
-                Console.WriteLine($"Mauvaise réponse, la capitale était {Capitals[CountryIndex]} !");
+                BadAnswer(Capitals[CountryIndex]);
                 return false;
             }
         }
+        static void AskWichCapital(string country)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"\nQuelle est la capitale du pays suivant : {country} ?");
+            Console.ResetColor();
+        }
+        static void BadAnswer(string correctAnswer)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Mauvaise réponse, la capitale était {correctAnswer} !");
+            Console.ResetColor();
+        }
+        static void GoodAnswersCounter(string counter)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"\n{counter} bonne(s) réponse(s) !");
+            Console.ResetColor();
+        }
 
-
-
+        static void GoodAnswer()
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Bonne réponse !");
+            Console.ResetColor();
+        }
 
         static bool AskGameAgain()
         {
-            Console.WriteLine("Voulez-vous rejouer ? (O/N)");
-            PlayerAnswerGameAgain = Console.ReadLine();
-            return GetGameAgainVerification();
+            string playerAnswerGameAgain;
+
+            do
+            {
+                Console.WriteLine("Voulez-vous rejouer ? (O/N)");
+                playerAnswerGameAgain = Console.ReadLine();
+                playerAnswerGameAgain = playerAnswerGameAgain.ToLower();
+            } while (playerAnswerGameAgain != "o" && playerAnswerGameAgain != "n");
+
+            return GetGameAgainVerification(playerAnswerGameAgain);
         }
 
-        static bool GetGameAgainVerification()
+        static bool GetGameAgainVerification(string playerAnswer)
         {
-            if (PlayerAnswerGameAgain == "O" || PlayerAnswerGameAgain == "o")
+            if (playerAnswer == "o")
             {
                 Console.Clear();
+                GoodAnswers = 0;
+                BadAnswers = 0;
+
                 return true;
             }
             else
             {
-                Console.WriteLine("Merci d'avoir joué, à la prochaine !");
                 return false;
             }
         }
@@ -288,7 +356,7 @@ namespace QuizzCapitales
                 {
                     if (CountryQuestionEasy(i)) GoodAnswers++;
                 }
-                Console.WriteLine($"\n{GoodAnswers} bonne(s) réponse(s) !");
+                GoodAnswersCounter(GoodAnswers.ToString());
 
                 GameAgain = AskGameAgain();
             }
@@ -305,7 +373,7 @@ namespace QuizzCapitales
                 {
                     if (Country > 0 && Country <= Countries.Length && CountryQuestionEasy(Country)) GoodAnswers++;
                 }
-                Console.WriteLine($"\n{GoodAnswers} bonne(s) réponse(s) !");
+                GoodAnswersCounter(GoodAnswers.ToString());
 
                 GameAgain = AskGameAgain();
             }

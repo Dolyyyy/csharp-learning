@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "bMNgAIrz5EuRjKHvsWDOjUrmQDfuDUHMKiW36CBUE7BLtc9YmoHWYRZQ1Uew853lW05Va4l4HQJ8hdxiLKZ7Yg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\a.burot\\Desktop\\C#\\1\\QuizzCapitales\\QuizzCapitales\\QuizzCapitales.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\a.burot\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x86\\7.0.10\\microsoft.netcore.app.runtime.win-x86.7.0.10.nupkg.sha512",
+    "C:\\Users\\a.burot\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x86\\7.0.10\\microsoft.windowsdesktop.app.runtime.win-x86.7.0.10.nupkg.sha512",
+    "C:\\Users\\a.burot\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x86\\7.0.10\\microsoft.aspnetcore.app.runtime.win-x86.7.0.10.nupkg.sha512"
+  ],
+  "logs": []
+}

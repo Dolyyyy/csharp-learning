@@ -1,0 +1,2 @@
+C:\Users\a.burot\Desktop\C#\1\QuizzCapitales\QuizzCapitales\bin\Release\net7.0\win-x64\publish\QuizzCapitales.pdb
+C:\Users\a.burot\Desktop\C#\1\QuizzCapitales\QuizzCapitales\bin\Release\net7.0\win-x64\publish\QuizzCapitales.exe
